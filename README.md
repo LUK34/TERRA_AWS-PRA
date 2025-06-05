@@ -99,7 +99,110 @@
 - The access key and secret (only immediately after creation).
 - The policy document in JSON (for debugging).
 
+## 06-IAM-multiple
+- Same as previous but to create multiple users.
 
+
+## 07-IAM_ROLE_GROUP_POLICY-SINGLE
+- **IAM ROLE**
+- Think of it like a temporary identity with specific permissions.
+- It can be assumed by users or services (like EC2, Lambda).
+- No username/password — instead, it’s used by trusted entities.
+- Used when a resource needs access to something (e.g., EC2 accessing S3).
+- Example: A role that allows EC2 to read/write from an S3 bucket.
+- **IAM GROUP**
+- A collection of IAM users.
+- You assign policies to the group, and all users in the group inherit those permissions.
+- Makes it easy to manage multiple users with the same set of permissions.
+- Example: A “Developers” group that gives all devs access to code repositories.
+- **IAM Policy**
+- A document (in JSON) that defines permissions.
+- It specifies what actions are allowed or denied on which AWS resources.
+- Can be attached to a user, group, or role.
+- Example: A policy that allows “read-only” access to all S3 buckets.
+
+## 08-VPC
+- **VPC (Virtual Private Cloud)**
+- A virtual network you create inside AWS.
+- It’s like your own private data center in the cloud.
+- You can launch EC2, RDS, and other resources inside a VPC.
+- You control the IP range, subnets, route tables, firewalls (security groups & NACLs), etc.
+- It isolates your resources from other AWS customers.
+- Think of a VPC as your custom-designed network in the cloud.
+- **CIDR Block (Classless Inter-Domain Routing)**
+- Defines the IP address range for your VPC or subnet.
+- Written like this: 10.0.0.0/16
+- 10.0.0.0 is the starting IP address.
+- /16 is the prefix, meaning 65,536 IPs (2⁶⁴ - 2 reserved IPs per subnet).
+- Smaller blocks (e.g., /24) give fewer IPs (256 in /24).
+- Used to plan and segment your network.
+- CIDR block = tells what IP addresses your network can use.
+
+## 09-VPC-subnet
+- **VPC (Virtual Private Cloud)**
+- A virtual network you create inside AWS.
+- It’s like your own private data center in the cloud.
+- You can launch EC2, RDS, and other resources inside a VPC.
+- You control the IP range, subnets, route tables, firewalls (security groups & NACLs), etc.
+- It isolates your resources from other AWS customers.
+- Think of a VPC as your custom-designed network in the cloud.
+- **CIDR Block (Classless Inter-Domain Routing)**
+- Defines the IP address range for your VPC or subnet.
+- Written like this: 10.0.0.0/16
+- 10.0.0.0 is the starting IP address.
+- /16 is the prefix, meaning 65,536 IPs (2⁶⁴ - 2 reserved IPs per subnet).
+- Smaller blocks (e.g., /24) give fewer IPs (256 in /24).
+- Used to plan and segment your network.
+- CIDR block = tells what IP addresses your network can use.
+-**Public Subnet**
+- A subnet that has internet access via Internet Gateway.
+- Any resource (like EC2) inside it can be accessed from the internet, if security groups allow.
+- You add a route to the Internet Gateway in the route table.
+- Analogy: A house with a door facing the main road – visible to outsiders.
+- **Private Subnet**
+- A subnet that does not have direct internet access.
+- Used for internal services like databases (RDS), backend apps, etc.
+- No route to Internet Gateway.
+- Can access the internet only through a NAT Gateway (for updates etc.).
+- Analogy: A house in a gated colony – not directly visible to outsiders.
+- **Internet Gateway (IGW)**
+- A gateway between your VPC and the internet.
+- Must be attached to the VPC.
+- Needed for public subnets to allow internet access (e.g., SSH into EC2).
+- Analogy: The main gate of your network that opens to the public road (internet).
+- **NAT Gateway (Network Address Translation)**
+- Allows instances in private subnets to access the internet (e.g., for updates, downloads).
+- Blocks incoming traffic from the internet — keeps your resources secure.
+- Placed in a public subnet and used via a route table.
+- Analogy: A guarded exit tunnel – lets people go out but not come in.
+- **cidrsubnet(var.vpc_cidr, 8, each.value + 100)**
+- This generates a new subnet CIDR block from a base CIDR (var.vpc_cidr), using:
+- 8 new subnet bits,
+- each.value + 100 as the index.
+- var.vpc_cidr: Base network (e.g., 10.0.0.0/16)
+- Number of bits to increase the subnetting (i.e., make /24 blocks from /16)
+- each.value + 100: Offset to determine which subnet block to generate
+- What It Does:
+- It splits your VPC CIDR (like 10.0.0.0/16) into smaller subnet blocks (like /24) and picks the (each.value + 100)-th one.
+- Example:
+- If var.vpc_cidr = "10.0.0.0/16" and each.value = 0, then:
+- cidrsubnet("10.0.0.0/16", 8, 100) will return:
+- 10.0.100.0/24
+- If each.value = 1, it becomes:
+- 10.0.101.0/24, and so on.
+- **tolist(data.aws_availability_zones.available.names)[each.value]**
+- Purpose:
+- This picks an availability zone (AZ) from the list of available zones based on the each.value index.
+- What It Does:
+- data.aws_availability_zones.available.names: Returns a list of AZs, e.g., ["us-east-1a", "us-east-1b", "us-east-1c"]
+- tolist(...): Ensures it's a proper list (sometimes needed in loops)
+- [each.value]: Picks the AZ based on the current loop index
+- Example:
+- If:
+- data.aws_availability_zones.available.names = ["us-east-1a", "us-east-1b", "us-east-1c"]
+- And each.value = 1, then:
+- tolist(data.aws_availability_zones.available.names)[1]
+- Returns "us-east-1b"
 
 
 
