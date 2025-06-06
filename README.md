@@ -308,7 +308,21 @@ so any time you add or update a module version you must run a terraform init.
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
 
-
+## 12-modules_part_3 
+- **IMPORTANT**
+- ** modules + workspace + enviroment variables **
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan -var-file="dev.tfvars"
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ## 13-EC2-IMPORT
 - **Usage:** terraform [global options] import [options] ADDR ID
