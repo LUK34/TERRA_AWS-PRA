@@ -205,6 +205,78 @@
 - Returns "us-east-1b"
 
 
+## 10-EC2-SINGLE-taint
+- Difference between `taint` and `replace`
+
+- **taint**
+- **Purpose:** Marks an existing resource for destruction and recreation on the next apply.
+- **Command:** terraform taint <resource_type>.<resource_name>
+- **When used:** When you manually decide that a resource is "bad" (e.g., misconfigured or corrupted), and needs to be recreated.
+- **Effect:** On the next terraform apply, the tainted resource is destroyed first, then recreated.
+- **State Impact:** Only updates the state file to mark the resource as tainted.
+
+- terraform apply -replace
+- **Purpose:** Forces recreation of a specific resource during that apply operation.
+- **Command:** terraform apply -replace=<resource_type>.<resource_name>
+- **When used:** When you want to replace a resource in one step without tainting it first.
+- **Effect:** Replaces the resource as part of the current apply – no need for a separate taint step.
+- **State Impact:** Terraform destroys and recreates the resource during the apply.
+
+- To understand `taint` process we execute the below commands:
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan -var-file="dev.tfvars"
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform taint aws_instance.lrm_v1
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform destroy -var-file="dev.tfvars" -auto-approve
+
+## 11-EC2-S3-taint
+- To understand `taint` process we execute the below commands:
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan -var-file="dev.tfvars"
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform taint aws_instance.lrm_v1
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform destroy -var-file="dev.tfvars" -auto-approve
+
+- To understand `replace` process we execute the below commands:
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan -var-file="dev.tfvars"
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform apply -var-file="dev.tfvars" -replace="aws_instance.lrm_v1" -auto-approve
+- terraform destroy -var-file="dev.tfvars" -auto-approve
+
+
+
+
+
+
+
+
 
 
 
