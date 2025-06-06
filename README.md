@@ -270,6 +270,45 @@
 - terraform apply -var-file="dev.tfvars" -replace="aws_instance.lrm_v1" -auto-approve
 - terraform destroy -var-file="dev.tfvars" -auto-approve
 
+## 12-modules_part_1
+- **This is quite overwhelming as multiple resources are added here**
+- A Terraform module is just a set of Terraform configuration files. 
+- Modules are just Terraform configurations inside a folder - there's nothing special about them. 
+- In fact, the code you’ve been writing so far is a module: the root module. For this lab, we'll create a local module for a new server configuration.
+- **Step 1.1:** Create a new directory called server in your /workspace/terraform directory and create a new file inside of it called server.tf.
+- **Step 1.2:** Edit the file server/server.tf, with the following contents:
+- **Step 1.3:** In your root configuration (also called your root module) /workspace/terraform/main.tf,
+- we can call our new server module with a Terraform module block. Remember that terraform only works with the configuration files that are in it's current working directory.
+- Modules allow us to reference Terraform configuration that lives outside of our working directory.
+- In this case we will incorporate all configuration that is both inside our working directory (root module) and inside the server directory (child module).
+- **Step 1.4:** Now run terraform init to install the module. Terraform configuration files located within modules are pulled down by Terraform during initialization, 
+so any time you add or update a module version you must run a terraform init.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+## 12-modules_part_2
+- ** Much more simpler and easier to understand than `12-modules_part_1`. Here workspace concept is applied. There is no enviroment variables here.**
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+
 
 ## 13-EC2-IMPORT
 - **Usage:** terraform [global options] import [options] ADDR ID
