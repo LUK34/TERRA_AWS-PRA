@@ -271,6 +271,39 @@
 - terraform destroy -var-file="dev.tfvars" -auto-approve
 
 
+## 13-EC2-IMPORT
+- **Usage:** terraform [global options] import [options] ADDR ID
+- Import existing infrastructure into your Terraform state.
+- This will find and import the specified resource into your Terraform state, allowing existing infrastructure to come under Terraform
+- management without having to be initially created by Terraform. The ADDR specified is the address to import the resource to. Please
+- see the documentation online for resource addresses. The ID is a resource-specific ID to identify that resource being imported. Please
+- reference the documentation for the resource type you're importing to determine the ID syntax to use. It typically matches directly to the ID
+- that the provider uses. This command will not modify your infrastructure, but it will make network requests to inspect parts of your infrastructure relevant to
+- the resource being imported.
+- make sure to add provider block
+- 1. Manually create the EC2 resource in AWS and start the EC2.
+- 2. Run the instance in AWS. Note the `instance id` to manually map the manually created instance in terraform.
+- 3. Create the resource block for the ec2 instance created. Add the `ami` and `instance_type` value.
+- ** I am keeping this code as simple as possible without adding any variable(input/output) + workspaces. This is just to understand how import works.**
+
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform import aws_instance.aws_linux i-0ffdb09858b34f4bc
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+
+
+
+
+
+
+
+
 
 
 
