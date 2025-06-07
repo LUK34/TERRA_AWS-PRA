@@ -349,6 +349,58 @@ so any time you add or update a module version you must run a terraform init.
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
 
+## 14-VPC-tc
+- Refer `OUTPUT SCREENSHOTS` -> `1.Terraform Login Output`
+- This tutorial will give you a brief overview of terraform cloud. How to create account and proceed further.
+- Refer SCREENSHOTS`
+
+## 15-modules_1_tc
+- Understand `14-VPC-tc` and apply the same process here. Then only this project will execute.
+- Need to have a provider block. Specify region only.
+- `Access key (AWS_ACCESS_KEY_ID)` and `Secret access key (AWS_SECRET_ACCESS_KEY)` should be specified in terraform cloud.
+- **CMD:**
+- terraform init -reconfigure
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+- A workspace name has to be all lower case letters, numbers, and dashes. 
+- The recommended naming convention from HashiCorp is the team name, the cloud the infrastructure will be deployed in,
+- the application or purpose of the infrastructure, and the environment, whether it's dev, staging, prod, etc. 
+- Workspace names are relative to the organization, so they do not have to be globally unique, only unique within the organization.
+
+- We will create 2 workspaces: `devops-aws-myapp-dev`, `devops-aws-myapp-prod`
+- For each of the workspaces -> add terraform variables -> `aws_region`, `vpc_name`, `environment`
+- `dev` -> `aws_region = us-east-1`, `vpc_name = dev_vpc`, `environment = dev`
+- `prod` -> `aws_region = us-east-1`, `vpc_name = prod_vpc`, `environment = prod`
+
+- Since we have Terraform Cloud workspaces that share the same Terraform codebase we will leverage backend partial configuration to select the correct workspace. 
+- If you are unfamilar with Terraform backend partial configuration it is recommended you reveiew the Terraform Backend Configuration lab which explains it in detail.
+- Create two new files in our working directory called dev.hcl and prod.hcl
+- `dev.hcl` -> `workspaces { name="devops-aws-myapp-dev"}`
+- `prod.hcl` -> `workspaces { name="devops-aws-myapp-prod"}`
+
+- **CMD:**
+- terraform init -backend-config=dev.hcl -reconfigure
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+- **CMD:**
+- terraform init -backend-config=prod.hcl -reconfigure
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+- **What belongs in a workspace?**
+- Often times we are asked - What should I put in a workspace? We recommend infrastructure that should be managed together as a unit be placed into the same workspace. 
+- Who has to manage it, how often does it change, does it have external dependencies that we can't control.
+- Ask these questions. Think about what happens when you run terraform apply. 
+- You should be able to describe what you just built, and what outputs it provides, who this infrastructure is for, and how to utilize it.
+- A workspace could be: An entire application stack from network on up. Great for dev environments that you want to be completely self-contained. 
+- Or it could be a workspace that builds core network infrastructure and nothing else. Maybe the network team has to manage that.
+- They get to be the lords of the network and provide terraform outputs to those who need a VPC or subnet. You can also use workspaces to deploy platform services like Kubernetes.
+
+
 
 
 
