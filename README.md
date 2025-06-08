@@ -362,7 +362,7 @@ so any time you add or update a module version you must run a terraform init.
 - terraform init -reconfigure
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
-
+- **Workspace in terraform cloud**
 - A workspace name has to be all lower case letters, numbers, and dashes. 
 - The recommended naming convention from HashiCorp is the team name, the cloud the infrastructure will be deployed in,
 - the application or purpose of the infrastructure, and the environment, whether it's dev, staging, prod, etc. 
