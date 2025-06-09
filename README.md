@@ -400,6 +400,107 @@ so any time you add or update a module version you must run a terraform init.
 - Or it could be a workspace that builds core network infrastructure and nothing else. Maybe the network team has to manage that.
 - They get to be the lords of the network and provide terraform outputs to those who need a VPC or subnet. You can also use workspaces to deploy platform services like Kubernetes.
 
+- **How to add Version Control System into Terraform Cloud**
+- OUTPUT SCREENSHOTS: `5. Terraform Adding VCS to Cloud`
+
+- **How to add Repository into Terraform Cloud**
+- OUTPUT SCREENSHOTS:  `6. Terraform Adding VCS into Workspace`
+
+- **Sentinel Policy**
+- Sentinel is the Policy-as-Code product from HashiCorp that automatically enforces logic-based policy decisions across all HashiCorp Enterprise products. 
+- It allows users to implement policy-as-code in a similar way to how Terraform implements infrastructure-as-code. 
+- If enabled, Sentinel is run between the terraform plan and apply stages of the workflow.
+- 1: Setup Workspace in Terraform Cloud
+- 2: Create Sentinel Policy
+- 3: Apply policy sets to the organization and application workspace
+- 4: Test and Enforce Sentinel Policy
+
+- **Sentinel Policy Set:**
+- You can group individual Sentinel policies together and specify their enforcement level using a Sentinel policy set.
+- We will be using a Sentinel policy set from the forked repo which is contained in a sentinel.hcl file. 
+- A policy set is a collection of sentinel policies are are defined within the sentinel.hcl file.
+- This level of enforcement for your Sentinel policies is also defined here.
+- If you have multiple policies in your policy repository, you list them within a policy set and Terraform Cloud applies the policies in the order they appear in this file.
+- We are also making use of sentinel modules to include some functions used by our Sentinel policies.
+
+- Policy enforcment levels are also defined inside the policy set. Sentinel has three enforcement levels:
+- **Advisory:** The policy is allowed to fail. However, a warning should be shown to the user or logged.
+- **Soft Mandatory:** The policy must pass unless an override is specified. The semantics of "override" are specific to each Sentinel-enabled application. The purpose of this level is to provide a level of privilege separation for a behavior. Additionally, the override provides non-repudiation since at least the primary actor was explicitly overriding a failed policy.
+- **Hard Mandatory:** The policy must pass no matter what. The only way to override a hard mandatory policy is to explicitly remove the policy. Hard mandatory is the default enforcement level. It should be used in situations where an override is not possible.
+
+
+## 16-VPC-tfstate-S3
+- **What is S3 used for in Terraform?**
+- Stores the actual .tfstate file which contains the current state of your infrastructure.
+- Allows multiple users or automation tools (like CI/CD pipelines) to access the same state.
+- Ensures state is not lost when Terraform is run from different machines.
+- **What is DynamoDB used for in this setup?**
+- **Purpose:** To provide state locking and consistency.
+- When one user or process is applying Terraform changes, DynamoDB locks the state file.
+- Prevents race conditions or simultaneous writes to the state file in S3.
+- Think of it as a traffic light for Terraform – only one car (terraform process) can go at a time.
+- **What Happens Without DynamoDB?**
+- If you only use S3 and no DynamoDB, and:
+- Two users run terraform apply at the same time...
+- Both try to update the .tfstate file...
+- **Result:** State file can get corrupted = infrastructure drift or errors
+- Refer `terraform.tf` file. This is the configuration block file that is responsible to tell terraform where to store the `tfstate` file.
+- In this scenario, before we run the terraform code we first create the s3 bucket. After the S3 bucket is created, we run the terraform code.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform init -reconfigure
+- terraform workspace show
+- terraform workspace new dev
+- terraform workspace new qlty
+- terraform workspace list
+- terraform workspace select dev
+- terraform plan -var-file="dev.tfvars"
+- terraform apply -var-file="dev.tfvars" -auto-approve
+- terraform destroy -var-file="dev.tfvars" -auto-approve
+
+## 17-modules_1_tfstate-remote
+- Go to browser and make sure that the `Organisation` and `Workspace` that you want to use is present.
+- If absent create the `Organisation` and `Workspace`.
+- ** Note: While creating the wokspace, Make sure the wokspace is `CLI driven` not `VCS driven`.**
+- After doing the above steps, write the configuration block code snippet. This code block will tell terraform that you must update the tfstate remotely in terraform cloud.
+- It is better to run the terraform CMDS in git bash.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform login
+- <paste the token id>
+- git clone https://github.com/hashicorp/tfc-getting-started.git
+- cd tfc-getting-started/
+- ./scripts/setup.sh
+- <The below commands do it in Visual Studio code terminal>
+- terraform init -reconfigure
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
+## 18-migration-r_l_s3_r_l
+- **OBJECTIVE:**
+- This project will focus on migration:
+- **TASK 1:** Migration from `remote backend` to `local backend`
+- **TASK 2:** Migration from `local backend` to `S3 bucket`
+- **TASK 3:** Migration from `S3 bucket` to `remote backend`
+- **TASK 4:** Migration from `remote backend` to `local backend`
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
