@@ -483,12 +483,123 @@ so any time you add or update a module version you must run a terraform init.
 - terraform destroy -auto-approve
 
 ## 18-migration-r_l_s3_r_l
-- **OBJECTIVE:**
-- This project will focus on migration:
-- **TASK 1:** Migration from `remote backend` to `local backend`
-- **TASK 2:** Migration from `local backend` to `S3 bucket`
-- **TASK 3:** Migration from `S3 bucket` to `remote backend`
-- **TASK 4:** Migration from `remote backend` to `local backend`
+- **OBJECTIVE:** This project will focus on migration:
+- **TASK 1: Migration of tfstate from `remote backend` to `local backend` **
+- **TASK 2: Migration of tfstate from `local backend` to `S3 bucket` **
+- **TASK 3: Migration of tfstate  from `S3 bucket` to `remote backend` **
+- **TASK 4: Migration of tfstate  from `remote backend` to `local backend` **
+
+- **Refer `HelloWorld.md` document**
+
+- **PREREQUSITES: For remote backend to work**
+- Go to browser and make sure that the `Organisation` and `Workspace` that you want to use is present.
+- If absent create the `Organisation` and `Workspace`.
+- ** Note: While creating the wokspace, Make sure the wokspace is `CLI driven` not `VCS driven`.**
+- After doing the above steps, write the configuration block code snippet. This code block will tell terraform that you must update the tfstate remotely in terraform cloud.
+- It is better to run the terraform CMDS in git bash.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform login
+- <paste the token id>
+- git clone https://github.com/hashicorp/tfc-getting-started.git
+- cd tfc-getting-started/
+- ./scripts/setup.sh
+
+- **PREREQUSITES: For local backend to work**
+- Create S3 Bucket and Dynamo DB. Refer the screenshots -> refer `8. tfstate_S3_DynaoDB` folder for all the images present.
+
+- **TASK 1: Migration of tfstate  from `remote backend` to `local backend` **
+- REMOTE BACKEND -> LOCAL BACKEND
+- Copy `local backend` code from `HelloWorld.md` file and paste this code in `terraform.tf`
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init -upgrade
+- terraform init -migrate-state
+- terraform validate
+- terraform plan
+- terraform apply -auto-approve
+
+- **TASK 2: Migration of tfstate  from `local backend` to `S3 bucket`**
+- LOCAL BACKEND -> S3 BACKEND
+- Copy `S3 bucket` code from `HelloWorld.md` file and paste this code in `terraform.tf`
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init -migrate-state
+- terraform validate
+- terraform plan
+- terraform apply -auto-approve
+- After this delete `tfstate` and `tfstate.backup` files
+- because having done this task we have officially migrated the tfstate file from `local backend` to `S3 backend`
+ 
+- **TASK 3: Migration of tfstate from `S3 bucket` to `remote backend`**
+- S3 BACKEND -> REMOTE BACKEND
+- Copy `Remote Backend` code from `HelloWorld.md` file and paste this code in `terraform.tf`
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init -migrate-state
+- terraform validate
+- terraform plan
+- terraform apply -auto-approve
+
+- **TASK 2: Migration of tfstate from `remote backend` to `local backend`**
+- REMOTE BACKEND -> LOCAL Backend
+- Copy `Local Backend` code from `HelloWorld.md` file and paste this code in `terraform.tf`
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init -migrate-state
+- terraform validate
+- terraform plan
+- terraform apply -auto-approve
+- terraform state list
+
+- **TASK 4: Migration of tfstate  from `remote backend` to `local backend` **
+- LOCAL BACKEND -> REMOTE BACKEND
+- Copy `Remote Backend` code from `HelloWorld.md` file and paste this code in `terraform.tf`
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init -migrate-state
+- terraform validate
+- terraform plan
+- terraform apply -auto-approve
+- terraform state list
+- terraform destroy -auto-approve
+
+- After doing **TASK 1 to TASK 4** perform destroy for all.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
