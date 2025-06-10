@@ -578,6 +578,24 @@ so any time you add or update a module version you must run a terraform init.
 
 - After doing **TASK 1 to TASK 4** perform destroy for all.
 
+## 19-variable-validation_1
+- This project focuses on how to add validation logic to variables
+- **CMDS:**
+- terraform init
+- terraform plan -var cloud=aws -var no_caps=training -var ip_address=1.1.1.1  -var character_limit=rpt
+- terraform plan -var cloud=all -var no_caps=Training -var ip_address=1223.22.342.22  -var character_limit=ga
+- ** How to handle sensitve information scenario**
+- terraform apply -var cloud=aws -var no_caps=training -var ip_address=1.1.1.1 -var character_limit=rpt -auto-approve
+- terraform destroy -auto-approve
+
+## 19-variable-validation_2
+- Same as the `19-variable-validation_1`. But this time we are initializing the values of the variables in a tfvars file
+- **CMDS:**
+- terraform init
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
 
 
 
