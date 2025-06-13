@@ -596,6 +596,29 @@ so any time you add or update a module version you must run a terraform init.
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
 
+## 20-collections
+- As you continue to work with Terraform, you're going to need a way to organize and structure data. 
+- This data could be input variables that you are giving to Terraform, or it could be the result of resource creation, 
+- like having Terraform create a fleet of web servers or other resources. 
+- Either way, you'll find that data needs to be organized yet accessible so it is referenceable throughout your configuration. 
+- The Terraform language uses the following types for values:
+- **string:** a sequence of Unicode characters representing some text, like "hello".
+- **number:** a numeric value. The number type can represent both whole numbers like 15 and fractional values like 6.283185.
+- **bool:** a boolean value, either true or false. bool values can be used in conditional logic.
+- **list (or tuple):** a sequence of values, like ["us-west-1a", "us-west-1c"]. Elements in a list or tuple are identified by consecutive whole numbers, starting with zero.
+- **map (or object):** a group of values identified by named labels, like {name = "Mabel", age = 52}. Maps are used to store key/value pairs.
+- Strings, numbers, and bools are sometimes called primitive types. Lists/tuples and maps/objects are sometimes called complex types, structural types, or collection types. 
+- Up until this point, we've primarily worked with string, number, or bool, although there have been some instances where we've provided a collection by way of input variables. 
+- In this lab, we will learn how to use the different collections and structure types available to us.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
 
 
 
