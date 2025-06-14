@@ -648,6 +648,19 @@ so any time you add or update a module version you must run a terraform init.
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
 
+## 22-dynamic-blocks
+- A dynamic block acts much like a for expression, but produces nested blocks instead of a complex typed value.
+- It iterates over a given complex value, and generates a nested block for each element of that complex value. 
+- You can dynamically construct repeatable nested blocks using a special dynamic block type, which is supported inside resource, data, provider, and provisioner blocks.
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
+
 
 
 
