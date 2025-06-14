@@ -661,7 +661,19 @@ so any time you add or update a module version you must run a terraform init.
 - terraform apply -auto-approve
 - terraform destroy -auto-approve
 
+- **create_before_destroy**
+- Terraform's default behavior when marking a resource to be replaced is to first destroy the resource and then create it. 
+- If the destruction succeeds cleanly, then and only then are replacement resources created. 
+- To alter this order of operation we can utilize the lifecycle directive create_before_destroy which does what it says on the tin.
+- Instead of destroying an instance and then provisioning a new one with the specified attributes, it will provision first. 
+- So two instances will exist simultaneously, then the other will be destroyed.
+- Let's create a simple AWS configuration with a security group and an associated EC2 instance. Provision them with terraform, then make a change to the security group. 
+- Observe that apply fails because the security group can not be destroyed and recreated while the instance lives.
+- You'll solve this situation by using create_before_destroy to create the new security group before destroying the original one.
 
+- **prevent_destroy**
+- Another lifecycle directive that we may wish to include in our configuraiton is prevent_destroy. This warns if any change would result in destroying a resource. 
+- All resources that this resource depends on must also be set to prevent_destroy.
 
 
 
