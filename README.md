@@ -620,9 +620,33 @@ so any time you add or update a module version you must run a terraform init.
 - terraform destroy -auto-approve
 
 
-
-
-
+## 21-functions
+- **max(): **Returns the maximum value among the arguments.
+- **max(1, 3, 2)  # Output: 3**
+- **min(): **Returns the minimum value among the arguments.
+- **min(10, 3, 5)  # Output: 3**
+- **upper():** Converts a string to uppercase.
+- **upper("hello")  # Output: "HELLO"**
+- **lower(): Converts a string to lowercase.**
+- **lower("HeLLo")  # Output: "hello"**
+- **cidrsubnet()Calculates subnet CIDRs within a given CIDR block.**
+- ** Syntax:cidrsubnet(base_cidr, newbits, netnum)**
+- **base_cidr:** The original CIDR block.
+- **newbits:** How many bits to add to create subnets.
+- **netnum:** Which subnet to generate (0-based index).
+- **cidrsubnet("10.0.0.0/16", 8, 1)  # Output: "10.1.0.0/24"**
+- ** Explanation:**
+- Original block: 10.0.0.0/16
+- Add 8 bits → Resulting subnet mask = /24
+- Subnet 1 (netnum = 1) of those /24 networks is 10.1.0.0/24
+- **CMDS:**
+- $env:AWS_ACCESS_KEY_ID = ""
+- $env:AWS_SECRET_ACCESS_KEY = ""
+- $env:AWS_REGION = ""
+- terraform init
+- terraform plan
+- terraform apply -auto-approve
+- terraform destroy -auto-approve
 
 
 
